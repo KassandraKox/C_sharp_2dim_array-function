@@ -8,7 +8,20 @@
 // 33 41 23
 // 17 28 34
 
-// 1. Создать 2мерный массив.
+// 1. Функция на проверку присутствия числа в массиве.
+bool Contains(int[] arr, int value)
+{
+    for (int i = 0; i<arr.Length; i++)
+    {
+        if (arr[i] == value)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+// 2. Создать 2мерный массив.
 Console.WriteLine("Введи количество строк: *рекомендую 3");
 int linesCount = int.Parse(Console.ReadLine());
 Console.WriteLine("Введи количество столбцов: *рекомендую 3");
@@ -21,50 +34,48 @@ if (volume <= 50)
     int stop = 100;
 
     int [,] twoDimArray = new int[linesCount, columnsCount];
+    int[] temp = new int[volume];
 
-    // 2. Заполнять рандомными двузначными числами.
-    Random rnd = new Random();
+    // 3. Генерируем 1мерный массив уникальных значений.
+    for (int k=0; k<volume; k++)
+    {
+        int rand = new Random().Next(start, stop);
+        // 4. Если уникальное значение уже есть в 1мерном массиве, генерируем новое.
+        while (Contains(temp, rand))
+        {
+            rand = new Random().Next(start, stop);
+        }
+        // 5. Поместить уникальное значение в 1мерный массив.
+        temp[k] = rand;
+    }
+
+    int count = 0;
+    // 6. Заполнить 2мерный массив ранее сгенерированными числами из 1мерного массива.
     for (int i=0; i<linesCount; i++)
     {
         for (int j=0; j<columnsCount; j++)
         {
-            int[] temp = new int[volume];
-            // 3. Проверять рандомное число на уникальность.
-            int  number;
-            for (int k = 0; k < volume; k++)
-            {
-                temp[k] = new Random().Next(start, stop);
-                number = temp[k];
-                if (k >= 1)
-                {
-                    for (int m = 0; m < k; m++)
-                    {
-                        while (temp[k] == temp[m])
-                        {
-                            temp[k] = new Random().Next(start, stop);
-                            m = 0;
-                            number = temp[k];
-                        }
-                        number = temp[k]; 
-                    }
-                }
-            }
-            // 4. вывести массив.
-            int count = 0; 
-            for (int x = 0; x < linesCount; x++)
-            {
-                for (int y = 0; y < columnsCount; y++)
-                {
-                    twoDimArray[i,j] = temp[count];
-                    Console.Write(twoDimArray[i,j] + " ");
-                    count++;
-                }
-                Console.WriteLine();
-            }
+            twoDimArray[i, j] = temp[count];
+            count++;
         }
+                
     }
-}
+    // 7. вывести массив.
+    for (int x = 0; x < linesCount; x++)
+        {
+        for (int y = 0; y < columnsCount; y++)
+            {
+                Console.Write(twoDimArray[x, y] + " ");
+            }
+        Console.WriteLine();
+    }
+}        
 else
 {
     Console.WriteLine("Размер массива должен быть не более 50 элементов.");
 }
+
+
+    
+    
+    
